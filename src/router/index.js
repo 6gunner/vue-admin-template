@@ -26,11 +26,11 @@ export default new VueRouter({
         requireAuth: true
       },
       children: [{
-        name: 'Welcome',
+        name: 'Index',
         path: '',
         component: lazyLoad('Welcome'),
         meta: {
-          title: '欢迎页面',
+          title: '首页',
           requireAuth: true
         }
       }]

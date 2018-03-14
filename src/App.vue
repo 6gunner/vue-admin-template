@@ -26,7 +26,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   @import "~@/assets/variables.scss";
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;

@@ -60,7 +60,16 @@ export default {
 </script>
 <style lang="scss" scoped>
   .side-menu:not(.el-menu--collapse) {
-    width: 264px;
+    width: 180px;
+  }
+  .el-menu {
+    width: 180px;
+    border: none;
+  }
+  /deep/ .el-submenu {
+    .el-menu-item {
+      min-width: 180px;
+    }
   }
 </style>
 

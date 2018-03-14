@@ -1,18 +1,21 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import _ from 'underscore'
-import {sync} from 'vuex-router-sync'
+import NProgress from 'nprogress' // progress bar
+import { sync } from 'vuex-router-sync'
 import Vue from 'vue'
 import AjaxPlugin from './plugins/ajax'
 import MessagePlugin from './plugins/message'
 import App from './App'
 import router from './router'
 import store from './store'
+
 import './assets/reset.css'
+import 'nprogress/nprogress.css'// progress bar style
 import './assets/iconfont/iconfont.css'
 
 
-let loadingInstance = null
+NProgress.configure({ showSpinner: false })
 
 Vue.config.productionTip = false
 
@@ -57,15 +60,12 @@ Vue.http.interceptors.response.use(response => {
     return response.data
   }
 }, error => {
-  loadingInstance.close()
   return Promise.reject(error)
 })
 
 
 router.beforeEach((to, from, next) => {
-  loadingInstance = Vue.prototype.$loading({
-    fullscreen: true
-  })
+  NProgress.start()
   if (to.path === '/login') {
     next()
   }else {
@@ -92,7 +92,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(() => {
-  loadingInstance.close()
+  NProgress.done()
 })
 
 

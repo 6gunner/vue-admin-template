@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="hamburger-container">
     <svg t="1492500959545" @click="toggleClick" class="hamburger" :class="{'is-active':isActive}" style="" viewBox="0 0 1024 1024"
          version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1691" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64">
       <path d="M966.8023 568.849776 57.196677 568.849776c-31.397081 0-56.850799-25.452695-56.850799-56.850799l0 0c0-31.397081 25.452695-56.849776 56.850799-56.849776l909.605623 0c31.397081 0 56.849776 25.452695 56.849776 56.849776l0 0C1023.653099 543.397081 998.200404 568.849776 966.8023 568.849776z"
@@ -11,7 +11,6 @@
     </svg>
   </div>
 </template>
-
 <script>
   export default {
     name: 'hamburger',
@@ -27,8 +26,14 @@
     }
   }
 </script>
-
 <style scoped>
+  .hamburger-container {
+    line-height: 40px;
+    height: 40px;
+    float: left;
+    padding: 0 10px;
+    width: 40px
+  }
   .hamburger {
     display: inline-block;
     cursor: pointer;
@@ -37,6 +42,7 @@
     transform: rotate(90deg);
     transition: .38s;
     transform-origin: 50% 50%;
+    vertical-align: middle;
   }
   .hamburger.is-active {
     transform: rotate(0deg);

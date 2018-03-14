@@ -1,18 +1,19 @@
 <template>
   <el-container>
-      <nav-header>
-      </nav-header>
+    <nav-header>
+    </nav-header>
     <el-main>
       <el-container class="main-container" >
-        <el-aside >
+        <div class="side-container">
           <side-menu class="side-menu" :collapse="isMenuCollapse"></side-menu>
-        </el-aside>
-        <el-main class="page-content" :class="{ml: isMenuCollapse}">
-          <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="route in matchedRoute" :to="{path: route.path}" :key="route.path">{{route.name}}</el-breadcrumb-item>
-          </el-breadcrumb>
+        </div>
+        <div class="page-content">
+          <div class="page-bar">
+            <hamburger :toggleClick="() => { isMenuCollapse = !isMenuCollapse }" :isActive="!isMenuCollapse"></hamburger>
+            <breadcrumb></breadcrumb>
+          </div>
           <router-view></router-view>
-        </el-main>
+        </div>
       </el-container>
     </el-main>
     <el-footer></el-footer>
@@ -42,10 +43,14 @@
 </template>
 <script>
 import { base64, md5, WS } from '@/tools/index'
-import { Aside, Button, Container, Dialog, Form, FormItem, Footer, Header, Input, Main, Breadcrumb, BreadcrumbItem } from 'element-ui'
+import { Aside, Button, Container, Dialog, Form, FormItem, Footer, Header, Input, Main } from 'element-ui'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import NavHeader from '@/components/NavHeader'
 import SideMenu from '@/components/SideMenu'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+
+
 export default {
   data () {
     let validatePass = (rule, value, callback) => {
@@ -96,18 +101,15 @@ export default {
     'el-footer': Footer,
     'el-input': Input,
     'el-main': Main,
-    'el-breadcrumb': Breadcrumb,
-    'el-breadcrumb-item': BreadcrumbItem,
     SideMenu,
-    NavHeader
+    NavHeader,
+    Breadcrumb,
+    Hamburger
   },
   computed: {
     ...mapState('login', {
       user: state => state.user
-    }),
-    matchedRoute () {
-      return this.$route.matched
-    }
+    })
   },
   methods: {
     ...mapActions('login', ['logout']),
@@ -158,22 +160,30 @@ export default {
     position: relative;
     width: 100%;
   }
+  .side-container {
+    width: 180px !important;
+    position: absolute;
+    left: 0;
+  }
   .side-menu {
     height:800px;
   }
   .page-content {
-    padding: 0 0 0 5px;
+    width: 100%;
     min-height: 800px;
+    transition: margin-left .28s;
+    margin-left: 180px;
     &.ml{
-      margin-left: -200px;
+      margin-left: 36px;
     }
   }
-  .el-breadcrumb {
+  .page-bar {
     height: 40px;
     line-height: 40px;
+    width: 100%;
     background-color: #fff;
-    margin: 5px;
-    padding-left: 10px;
+    margin: 0;
+    padding: 0;
   }
   .collapseMenu {
     font-size: 30px;
