@@ -5,13 +5,13 @@ const dirs = {
 }
 gulp.task('scp', function () {
   return gulp.src(['dist/**/*'], {base: 'dist'})
-    // .pipe(scp({
-    //   host: '47.97.245.112',
-    //   port: 4922,
-    //   username: 'root',
-    //   password: 'Ld@digital123123',
-    //   dest: '/data/src/java/dist'
-    // }))
+    .pipe(scp({
+      host: '47.97.245.112',
+      port: 4922,
+      username: 'root',
+      password: 'Ld@digital123123',
+      dest: '/root/boms/boms-manager'
+    }))
     .on('error', function (err) {
       console.log(err)
     })

@@ -1,27 +1,29 @@
 <template>
-  <el-container>
-    <nav-header>
+  <el-container direction="vertical">
+    <nav-header @changePwd="()=>{dialogVisible = true}">
     </nav-header>
     <el-main>
-      <el-container class="main-container" >
+      <el-container class="main-container">
         <div class="side-container">
           <side-menu class="side-menu" :collapse="isMenuCollapse"></side-menu>
         </div>
-        <div class="page-content">
+        <div class="page-container" :class="{ml:isMenuCollapse}">
           <div class="page-bar">
             <hamburger :toggleClick="() => { isMenuCollapse = !isMenuCollapse }" :isActive="!isMenuCollapse"></hamburger>
             <breadcrumb></breadcrumb>
           </div>
-          <router-view></router-view>
+          <router-view class="view-container"></router-view>
         </div>
       </el-container>
     </el-main>
-    <el-footer></el-footer>
     <el-dialog
+      v-draggable
       title="修改密码"
       :visible.sync="dialogVisible"
       append-to-body
       :lock-scroll="false"
+      :close-on-click-modal="false"
+      width="450px"
       center>
       <el-form :model="form" staus-icon :rules="rules" width="30%" ref="form">
         <el-form-item label="原密码" label-width="100px" prop="oldPassword">
@@ -35,8 +37,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="changePassword">确 定</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="changePassword">确 定</el-button>
       </span>
     </el-dialog>
   </el-container>
@@ -49,7 +51,6 @@ import NavHeader from '@/components/NavHeader'
 import SideMenu from '@/components/SideMenu'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-
 
 export default {
   data () {
@@ -87,6 +88,10 @@ export default {
         checkPassword: [
           { required: true, validator: validatePass2, trigger: 'blur' }
         ]
+      },
+      draggableObj: {
+        boundingRect: document.body.getBoundingClientRect()
+
       }
     }
   },
@@ -114,11 +119,10 @@ export default {
   methods: {
     ...mapActions('login', ['logout']),
     ...mapActions('menu', ['getMenus']),
+    ...mapActions('cache', ['initCache']),
     handleOpen(key, keyPath) {
-      console.log(key, keyPath)
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath)
     },
     changePassword () {
       this.$refs.form.validate((valid) => {
@@ -140,6 +144,7 @@ export default {
   },
   beforeMount () {
     this.getMenus()
+    this.initCache()
   }
 }
 </script>
@@ -147,44 +152,78 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   @import '~@/assets/theme.scss';
-  .el-main{
+  .el-container {
+    height: 100%;
+  }
+  .el-main {
     padding: 0;
+    height: calc(100% - 56px);
     position: relative;
     background-color: $theme-bg-color;
   }
-  .el-footer{
+  .el-footer {
     background-color: #181B2A;
     position: relative;
   }
   .main-container {
-    position: relative;
     width: 100%;
   }
   .side-container {
-    width: 180px !important;
     position: absolute;
     left: 0;
-  }
-  .side-menu {
-    height:800px;
-  }
-  .page-content {
-    width: 100%;
-    min-height: 800px;
-    transition: margin-left .28s;
-    margin-left: 180px;
-    &.ml{
-      margin-left: 36px;
+    top: 0;
+    height: 100%;
+    z-index: 100;
+
+    .side-menu {
+      height: 100%;
+      overflow: scroll;
     }
   }
-  .page-bar {
-    height: 40px;
-    line-height: 40px;
+  .page-container {
+    position: absolute;
     width: 100%;
+    height: 100%;
+    transition: padding-left .28s;
+    padding-left: 180px;
     background-color: #fff;
-    margin: 0;
-    padding: 0;
+    overflow: scroll;
+    &.ml{
+      padding-left: 64px;
+    }
+    .page-bar {
+      height: 40px;
+      line-height: 40px;
+      width: 100%;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+      box-shadow: .5px .5px .5px #888;
+    }
+    .view-container {
+      background-color: #fff;
+      margin-top: 5px;
+    }
+
+    /*滚动条整体部分*/
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 0;
+      background-color: transparent;
+    }
+    /*滚动条里面的小方块*/
+    &::-webkit-scrollbar-thumb {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.05);
+      background-color: rgba(145, 148, 164, 0.15);
+    }
+    /*滚动条里面的轨道*/
+    &::-webkit-scrollbar-track {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.15);
+      background-color: #FFFFFF;
+    }
   }
+
   .collapseMenu {
     font-size: 30px;
     line-height: 56px;

@@ -25,16 +25,18 @@ export default {
   },
   actions: {
     login ({commit}, data) {
-      return ajax.post('login.do', data)
-        .then(resp => {
-          if (!_.isEmpty(resp) && !resp.error_code) {
-            let user = _.omit(resp, 'error_code', 'error_deal', 'error_info', 'error_level', 'error_prompt')
-            commit('loginSuccess', user)
-          } else {
-            commit('loginError', resp)
-            throw new Error('登录失败,' + resp.error_info)
-          }
-        })
+      return ajax.post('login.do', {
+        ...data,
+        oper_way: 2
+      }).then(resp => {
+        if (!_.isEmpty(resp) && !resp.error_code) {
+          let user = _.omit(resp, 'error_code', 'error_deal', 'error_info', 'error_level', 'error_prompt')
+          commit('loginSuccess', user)
+        } else {
+          commit('loginError', resp)
+          throw new Error('登录失败,' + resp.error_info)
+        }
+      })
     },
     logout ({commit}) {
       return ajax.post('logout.do')

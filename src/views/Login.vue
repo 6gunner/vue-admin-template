@@ -15,16 +15,12 @@
         <el-button type="primary" @click="loginHandler" >登录</el-button>
       </el-form>
     </el-main>
-    <el-alert
-      :title="errorMsg"
-      type="error" v-show="error">
-    </el-alert>
+    <el-footer class="login-footer" height="10px"></el-footer>
   </el-container>
 </template>
-
 <script>
 import { base64, md5 } from '@/tools/index'
-import { Container, Header, Main, Form, Input, Button, Alert } from 'element-ui'
+import { Alert, Button, Container, Form, Footer, Header, Input, Main } from 'element-ui'
 import { mapActions } from 'vuex'
 export default {
   data () {
@@ -36,17 +32,16 @@ export default {
     }
   },
   components: {
+    'el-button': Button,
     'el-container': Container,
-    'el-main': Main,
     'el-header': Header,
     'el-form': Form,
+    'el-footer': Footer,
     'el-input': Input,
-    'el-button': Button,
-    'el-alert': Alert
+    'el-main': Main
   },
   methods: {
     ...mapActions('login', ['login']),
-
     loginHandler () {
       let username = this.username
       let password = this.password
@@ -57,8 +52,7 @@ export default {
       this.login(data).then(() => {
         this.$router.push('/index')
       }).catch(error => {
-        this.errorMsg = '登录失败' + error
-        this.error = true
+        console.error('登录失败: ' + error)
       })
     }
   }
@@ -74,8 +68,11 @@ export default {
   }
   .login-main {
     /*background: #FFF;*/
-    background: url('~@/assets/login.png') 0 0 no-repeat;
+    background: url('~@/assets/login-bg.jpg') 0 0 no-repeat;
     background-size: 100% 100%;
+  }
+  .login-footer {
+    background-color: #000;
   }
   .login-form {
     background-color: rgba(35,35,35,.75);

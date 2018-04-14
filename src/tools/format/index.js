@@ -79,6 +79,10 @@ Date.prototype.fromDateAndTime = function (date, time) {
     this.setHours(parseInt(time / 10000));
     this.setMinutes(parseInt((time % 10000) / 100));
     this.setSeconds((time % 10000) % 100);
+  } else {
+    this.setHours(0)
+    this.setMinutes(0)
+    this.setSeconds(0)
   }
   return this;
 }

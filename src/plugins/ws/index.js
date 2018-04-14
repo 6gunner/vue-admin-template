@@ -1,3 +1,5 @@
+// websocket插件，组件访问通过this.$socket
+
 import Observer from './observer'
 import emitter from './emitter'
 

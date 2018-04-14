@@ -1,5 +1,6 @@
 <template>
   <el-menu default-active="1"
+           :unique-opened="true"
            :router="true"
            class="side-menu"
            background-color="#545c64"
@@ -7,16 +8,30 @@
            active-text-color="#ffd04b"
            @open="handleOpen"
            @close="handleClose"
-           :collapse="collapse">
+           :collapse="collapse"
+           :default-active="defaultActive"
+           :default-openeds="defaultOpeneds"
+           >
     <template v-for="menu in menus">
-      <el-submenu v-if="menu.children" index="menu.id">
+      <el-submenu v-if="menu.children" :index="menu.url">
         <template slot="title">
           <i v-if="menu.icon" :class="menu.icon"></i>
           <span slot="title">{{menu.name}}</span>
         </template>
-        <el-menu-item v-for="submenu in menu.children" :index="submenu.url" :key="submenu.id">
-          {{submenu.name}}
-        </el-menu-item>
+        <template v-for="submenu in menu.children">
+          <el-submenu :index="submenu.url" v-if="submenu.children">
+            <template slot="title">
+              <i v-if="submenu.icon" :class="submenu.icon"></i>
+              <span slot="title">{{submenu.name}}</span>
+            </template>
+            <el-menu-item v-for="subsubmenu in submenu.children" :index="subsubmenu.url" :key="subsubmenu.id">
+              {{subsubmenu.name}}
+            </el-menu-item>
+          </el-submenu>
+          <el-menu-item :index="submenu.url" :key="submenu.id" v-else>
+            {{submenu.name}}
+          </el-menu-item>
+        </template>
       </el-submenu>
       <el-menu-item v-else :index="menu.url" :disabled="menu.disabled==='1'">
         <i v-if="menu.icon" :class="menu.icon"></i>
@@ -31,6 +46,8 @@ import {mapState} from 'vuex'
 export default {
   data () {
     return {
+      defaultActive: '',
+      defaultOpeneds: []
     }
   },
   computed: {
@@ -55,20 +72,34 @@ export default {
     },
     handleClose () {
     }
+  },
+  watch: {
+    menus(newValue) {
+      this.$nextTick(() => {
+        this.defaultActive = this.$route.path
+      })
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
-  .side-menu:not(.el-menu--collapse) {
-    width: 180px;
-  }
-  .el-menu {
-    width: 180px;
-    border: none;
-  }
-  /deep/ .el-submenu {
-    .el-menu-item {
-      min-width: 180px;
+  .side-menu{
+    &:not(.el-menu--collapse) {
+      width: 180px;
+      border: none;
+    }
+    /deep/ .el-submenu {
+      .el-menu-item {
+        min-width: 180px;
+      }
+      .iconfont {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+        width: 24px;
+        text-align: center;
+        font-size: 18px;
+      }
     }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
       <h1 class="text-jumbo text-ginormous">欢迎来到 管理端页面!</h1>
   </div>
 </template>
@@ -15,16 +15,12 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .container {
-    width: 100%;
-    margin-top: 0;
+  .text-jumbo {
     color: rgba(27,31,35,0.85);
-    .text-jumbo {
-      margin-top: 100px;
-      text-align: center;
-      font-size: 60px;
-      font-weight: 700;
-      color: #484848;
-    }
+    margin-top: 100px;
+    text-align: center;
+    font-size: 60px;
+    font-weight: 700;
+    color: #484848;
   }
 </style>

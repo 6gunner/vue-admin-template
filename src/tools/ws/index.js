@@ -1,3 +1,4 @@
+// webscoket类
 export default class{
   constructor (url, opts = {}) {
     this.connectionUrl = url

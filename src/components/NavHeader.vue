@@ -4,13 +4,13 @@
       <img src="~@/assets/logo.svg" class="header-logo-img">
     </a>
     <ul class="header-user">
-      <li class="el-menu-item">
-        <a @click="toggleUserList">
+      <li class="el-menu-item" @mouseenter="show = true" @mouseleave="show = false">
+        <a @click="toggleUserList" >
           你好，{{user.operator_name}}
           <i class="el-menu-icon el-icon-caret-bottom"></i>
         </a>
         <ul class="header-user-list" v-show="show">
-          <li @click="dialogVisible = true"><a href="javascript:;"><i class="el-icon-edit-outline"></i>修改密码</a></li>
+          <li @click="changePwd"><a href="javascript:;"><i class="el-icon-edit-outline"></i>修改密码</a></li>
           <li @click="logout"><a href="javascript:;"><i class="iconfont icon-logout"></i>注销</a></li>
         </ul>
       </li>
@@ -18,24 +18,29 @@
   </el-header>
 </template>
 <script>
-  import {Header} from 'element-ui'
-  import {mapActions} from 'vuex'
+  import { Header } from 'element-ui'
+  import { mapState, mapActions } from 'vuex'
   export default {
-    data () {
+    data() {
       return {
-        user: {
-          operator_name: 'Ky'
-        },
         show: false
       }
     },
     components: {
       'el-header': Header
     },
+    computed: {
+      ...mapState('login', {
+        user: state => state.user
+      })
+    },
     methods: {
       ...mapActions('login', ['logout']),
       toggleUserList ()　{
         this.show = !this.show
+      },
+      changePwd () {
+        this.$emit('changePwd')
       }
     }
   }
