@@ -6,10 +6,10 @@ const dirs = {
 gulp.task('scp', function () {
   return gulp.src(['dist/**/*'], {base: 'dist'})
     .pipe(scp({
-      host: '47.97.245.112',
-      port: 4922,
-      username: 'root',
-      password: 'Ld@digital123123',
+      host: '127.0.0.1',
+      port: 22,
+      username: 'xxx',
+      password: 'xxx',
       dest: '/root/boms/boms-manager'
     }))
     .on('error', function (err) {
